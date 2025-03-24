@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script>
+        var xhr=new XMLHttpRequest();
+function getData(){
+    var url;
+    console.log(url.value)
+    xhr.open("GET","mydata.txt",true);
+    xhr.onreadystatechange=function(){
+        if(xhr.readyState==4 && xhr.status==200){
+            var response=xhr.responseText;
+            var target=document.getElementById("mydiv");
+            target.innerHTML="<h1>"+response +"</h1>";
+            window.setTimeout("getData();",300);
+        }
+    }
+    xhr.send(null);
+    
+}
+    </script>
+</head>
+<body>
+    URL:<input type="text" name="t1" size="45">
+    <input type="button" value="clickme" onclick="getData()">
+    <div id="mydiv">
+        This is default data....
+    </div>
+</body>
+</html>

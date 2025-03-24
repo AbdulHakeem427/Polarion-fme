@@ -1,0 +1,37 @@
+<html>
+<head>
+<title>jQuery AJAX Pagination</title>
+<link href="css/style.css" rel="stylesheet" type="text/css" />
+<script src="http://code.jquery.com/jquery-2.1.1.js"></script>
+<script>
+function getresult(url) {
+    $('#loader-icon').show();
+    $.ajax({
+        url: url,
+        type: "GET",
+        data: { rowcount: $("#rowcount").val() },
+        success: function(data) {
+            $("#pagination").html(data);
+            $("#loader-icon").hide();
+        },
+        error: function() { }
+    });
+}
+</script>
+<style>
+#loader-icon {
+    text-align: center;
+    position: relative;
+    top: 10px;
+}
+</style>
+</head>
+<body>
+    <div id="pagination">
+        <input type="hidden" name="rowcount" id="rowcount" />
+    </div>
+    <script>
+getresult("getresult.php");
+</script>
+</body>
+</html>

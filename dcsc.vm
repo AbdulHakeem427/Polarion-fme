@@ -1,0 +1,45 @@
+#set($projectId=$page.getReference().projectId())
+#set($WI=$transaction.workItems().search().query("project.id: $projectId AND type: risk"))
+#macro(getCellColor $severityField $occuranceField $color)
+    #set($color = "")
+    #if($severityField == 1 && $occuranceField == 1 || $severityField == 2 && $occuranceField == 1 || $severityField == 2 && $occuranceField == 2 || $severityField == 3 && $occuranceField == 2 || $severityField == 3 && $occuranceField == 3 || $severityField == 4 && $occuranceField == 3 || $severityField == 4 && $occuranceField == 4 || $severityField == 5 && $occuranceField == 4 || $severityField == 5 && $occuranceField == 5)
+            #set($color = 'bgcolor:#FFEA20')
+    #elseif($severityField == 1 && $occuranceField == 2 || $severityField == 1 && $occuranceField == 3 || $severityField == 1 && $occuranceField == 4 || $severityField == 1 && $occuranceField == 5 || $severityField == 2 && $occuranceField == 3 || $severityField == 2 && $occuranceField == 4 || $severityField == 2 && $occuranceField == 5 || $severityField == 3 && $occuranceField == 4 || $severityField == 3 && $occuranceField == 5 || $severityField == 4 && $occuranceField == 5)
+            #set($color = 'bgcolor="#379237"')
+    #elseif($severityField == 3 && $occuranceField == 1 || $severityField == 4 && $occuranceField == 1 || $severityField == 4 && $occuranceField == 2 || $severityField == 5 && $occuranceField == 1 || $severityField == 5 && $occuranceField == 2 || $severityField == 5 && $occuranceField == 3)
+            #set($color = 'bgcolor="#DF2E38"')
+    #end
+#end
+#macro(getRisk $severityField $occuranceField $h $BGcolor)
+    #if($severityField == 1 && $occuranceField == 1 || $severityField == 2 && $occuranceField == 1 || $severityField == 2 && $occuranceField == 2 || $severityField == 3 && $occuranceField == 2 || $severityField == 3 && $occuranceField == 3 || $severityField == 4 && $occuranceField == 3 || $severityField == 4 && $occuranceField == 4 || $severityField == 5 && $occuranceField == 4 || $severityField == 5 && $occuranceField == 5)
+        #set($h = "Zone 2")
+    #elseif($severityField == 1 && $occuranceField == 2 || $severityField == 1 && $occuranceField == 3 || $severityField == 1 && $occuranceField == 4 || $severityField == 1 && $occuranceField == 5 || $severityField == 2 && $occuranceField == 3 || $severityField == 2 && $occuranceField == 4 || $severityField == 2 && $occuranceField == 5 || $severityField == 3 && $occuranceField == 4 || $severityField == 3 && $occuranceField == 5 || $severityField == 4 && $occuranceField == 5)
+        #set($h = "Zone 1")
+    #elseif($severityField == 3 && $occuranceField == 1 || $severityField == 4 && $occuranceField == 1 || $severityField == 4 && $occuranceField == 2 || $severityField == 5 && $occuranceField == 1 || $severityField == 5 && $occuranceField == 2 || $severityField == 5 && $occuranceField == 3)
+        #set($h = "Zone 3")
+    #end
+    #getCellColor ($severityField $occuranceField $BGcolor)
+#end
+
+<table border = 5>
+<tr>
+<th class="head">ID</th>
+<th class="head">Severity of Harm</th>
+<th class="head">Occurance of Harm</th>
+<th class="head">Risk</th>
+</tr>
+#foreach($WIs in $WI)
+	<tr>
+		<td class="data">$WIs.fields().id.render().openLinksInNewWindow()</td>
+		#set($severityField=$WIs.fields().severityRating.get().id())
+		#set($severityField=$number.toNumber($severityField).intValue())
+		<td class="data">$WIs.fields().severityRating.render()</td>
+
+		#set($occuranceField=$WIs.fields().occurrenceRating.get().id())
+		#set($occuranceField=$number.toNumber($occuranceField).intValue())
+		<td  class="data">$WIs.fields().occurrenceRating.render()</td>
+		#getRisk ($severityField $occuranceField $h $color)
+		<td class="data" #getCellColor ($severityField $occuranceField $color)><b>#getRisk ($severityField $occuranceField $h $color)</b></td>
+	</tr>
+#end
+</table>
